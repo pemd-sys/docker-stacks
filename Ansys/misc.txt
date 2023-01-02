@@ -1,0 +1,139 @@
+
+RUN echo -e '#!/bin/bash\n/opt/ansys_inc/v222/Framework/bin/Linux64/runwb2 -oglhw' > /usr/bin/wb2 && \
+    chmod +x /usr/bin/wb2
+
+
+ENV ANSYS222_DIR=/opt/ansys_inc/v222/ansys
+ENV PATH=/opt/ansys_inc/v222/fluent/bin:$PATH
+ENV PATH=/opt/ansys_inc/v222/CFX/bin:$PATH
+ENV PATH=/opt/ansys_inc/v222/icemcfd/linux64_amd/bin:$PATH
+ENV PATH=/opt/ansys_inc/v222/Framework/bin/Linux64/:$PATH
+
+sudo apt-get install libqt5quickcontrols2-5 libqt5multimedia5 libqt5webengine5 libqt5quick5 libqt5qml5
+sudo apt-get install libicu-dev libqt5webengine5 libqt5sensors5 libqt5webkit5 libqt5printsupport5 
+
+sudo apt-get install libjpeg62:i386 libicu-dev qt5-default
+
+
+sudo apt install nvidia-docker2
+sudo systemctl restart docker
+
+
+
+
+
+
+docker run \
+    --runtime=nvidia -it --rm \
+    --device=/dev/dri:/dev/dri --env="DISPLAY=$DISPLAY" \
+    --env="XAUTHORITY=$XAUTHORITY" \
+    -e __NV_PRIME_RENDER_OFFLOAD=1 -e __GLX_VENDOR_LIBRARY_NAME=nvidia \
+    -e NVIDIA_DRIVER_CAPABILITIES=all -e NVIDIA_VISIBLE_DEVICES=all \
+    --volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
+    -v $(pwd)/project:/project\
+    temp:latest
+    
+    
+    
+    docker run \
+        --runtime=nvidia -it --rm  \
+        --ulimit memlock=-1:-1 --ulimit stack=1073741824:1073741824 \
+        --shm-size=2g \
+        --device=/dev/dri:/dev/dri --env="DISPLAY=$DISPLAY" \
+        --env="XAUTHORITY=$XAUTHORITY" \
+        -e __NV_PRIME_RENDER_OFFLOAD=1 -e __GLX_VENDOR_LIBRARY_NAME=nvidia \
+        -e NVIDIA_DRIVER_CAPABILITIES=all -e NVIDIA_VISIBLE_DEVICES=all \
+        -e QT_ACCESSIBILITY=1 \
+        --volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
+        temp:latest
+        
+
+
+
+        
+
+eula
+install directory = /opt/ansys_inc
+AnsysLicencing interconnect port number:2325
+Ansys Flexnet port : 1055
+no. of servers : 1
+Hostname: 10.1.0.4
+
+CFX INCLUDES CFD-POST
+CHEMKIN
+ENERGICO
+MODEL FUEL LIBRARY
+REACTION WORKBENCH
+ENSIGHT
+FENSAP-ICE
+FLUENT
+FORTE
+POLYFLOW
+TURBOGRID
+
+OPTISLANG
+MECHANICAL PRODUCTS
+ICEPAK
+ANSYS GEOMETRY INTERFACES
+
+SKIP CAD CONFIGS
+
+folders
+~/.ansys
+~/.cache
+~/.config
+~/.mw
+~/.nv
+~/Ansoft
+~/Installshield
+
+
+
+ansysEM (tools-options-generaloptions)
+project directory : /home/glacier/Ansoft
+
+
+# with nvidia
+
+    docker run \
+        --runtime=nvidia -it --rm --user glacier --hostname=AnsysDocker \
+        --ulimit memlock=-1:-1 --ulimit stack=1073741824:1073741824 \
+        --ipc="host" --cap-drop=ALL --security-opt=no-new-privileges \
+        --shm-size=2g \
+        --device=/dev/dri:/dev/dri --env="DISPLAY=$DISPLAY" \
+        --env="XAUTHORITY=$XAUTHORITY" --env="XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" \
+        -e __NV_PRIME_RENDER_OFFLOAD=1 -e __GLX_VENDOR_LIBRARY_NAME=nvidia \
+        -e NVIDIA_DRIVER_CAPABILITIES=all -e NVIDIA_VISIBLE_DEVICES=all \
+        -e QT_ACCESSIBILITY=1 -e ANSYS222_WORKING_DIRECTORY=$ANSYSWORKDIR \
+        --volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
+        -v $XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
+        -v $ANSYSHOSTDIR:$ANSYSDIR -v $ANSYSHOSTCACHEDIR:$ANSYSCACHEDIR \
+        -v $ANSYSHOSTCONFIGDIR:$ANSYSCONFIGDIR -v $ANSYSHOSTMWDIR:$ANSYSMWDIR \
+        -v $ANSYSHOSTNVDIR:$ANSYSNVDIR -v $ANSYSHOSTEMDIR:$ANSYSEMDIR \
+        -v $INSTALLSHIELDHOSTDIR:$INSTALLSHIELDDIR -v $FLUENTHOSTCONFIGDIR:$FLUENTCONFIGDIR \
+        -v $ANSYSHOSTWORKDIR:$ANSYSWORKDIR \
+        --workdir $ANSYSWORKDIR --name $CONTAINER_NAME temp:latest
+
+
+
+
+#without nvidia
+
+    docker run \
+         -it --rm --user glacier --hostname=AnsysDocker \
+        --ulimit memlock=-1:-1 --ulimit stack=1073741824:1073741824 \
+        --ipc="host" --cap-drop=ALL --security-opt=no-new-privileges \
+        --shm-size=2g \
+        --device=/dev/dri:/dev/dri --env="DISPLAY=$DISPLAY" \
+        --env="XAUTHORITY=$XAUTHORITY" --env="XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" \
+        -e QT_ACCESSIBILITY=1 -e ANSYS222_WORKING_DIRECTORY=$ANSYSWORKDIR \
+        --volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
+        -v $XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
+        -v $ANSYSHOSTDIR:$ANSYSDIR -v $ANSYSHOSTCACHEDIR:$ANSYSCACHEDIR \
+        -v $ANSYSHOSTCONFIGDIR:$ANSYSCONFIGDIR -v $ANSYSHOSTMWDIR:$ANSYSMWDIR \
+        -v $ANSYSHOSTNVDIR:$ANSYSNVDIR -v $ANSYSHOSTEMDIR:$ANSYSEMDIR \
+        -v $INSTALLSHIELDHOSTDIR:$INSTALLSHIELDDIR -v $FLUENTHOSTCONFIGDIR:$FLUENTCONFIGDIR \
+        -v $ANSYSHOSTWORKDIR:$ANSYSWORKDIR \
+        --workdir $ANSYSWORKDIR --name $CONTAINER_NAME temp_u:latest
+
+
