@@ -10,7 +10,7 @@ xhost +"local:docker@"
 
 # create fake network
 docker network rm no-internet
-docker network create --internal --subnet 99.1.1.0/24 no-internet
+docker network create --internal --subnet 99.1.1.0/8 no-internet
 
 CONTAINER_NAME=MatlabContainer
 

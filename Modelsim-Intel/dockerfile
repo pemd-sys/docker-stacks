@@ -1,0 +1,98 @@
+# Docker for Quartus modelsim installation
+# https://profile.iiita.ac.in/bibhas.ghoshal/COA_2020/Lab/ModelSim%20Linux%20installation.html
+# https://github.com/jprx/modelsim_docker
+# https://github.com/goldenSniperOS/modelsim-docker
+# https://github.com/phwl/elec3608-github/tree/master/elec3608-vsim
+# https://vhdlwhiz.com/modelsim-quartus-prime-lite-ubuntu-20-04/
+# https://www.intel.com/content/www/us/en/software-kit/661017/intel-quartus-prime-lite-edition-design-software-version-20-1-for-linux.html 
+
+
+
+FROM ubuntu:latest
+ 
+LABEL mantainer="Bhaskar Sen bhaskar.sen1@outlook.com"
+
+ARG version_modelsim="20.1.1"
+ARG build_modelsim="720"
+ARG modelsim_installer="ModelSimSetup-${version_modelsim}.${build_modelsim}-linux.run"
+ARG installer_path="/tmp"
+ARG install_path="/opt/intelFPGA/20.1"
+
+ 
+ENV DEBIAN_FRONTEND=noninteractive
+# install dependences for Modelsim:
+
+RUN apt-get update && apt-get install -y \
+  wget \
+  curl \
+  build-essential \
+  git \
+  bash \
+  sudo \
+  mc \
+  vim \
+  libxtst6 \
+  libglib2.0-0 \
+  libsm6 \
+  libxi6 \
+  libxrender1 \
+  libxrandr2 \
+  libfreetype6 \
+  libfontconfig \
+  vim-gtk3 \
+  x11-apps \
+  python3 \
+  verilator \
+  unzip \
+  tmux \
+  python3-numpy \
+  lib32z1 \
+  xterm \
+  libqt5xml5 \
+  liblzma-dev
+
+#install add-apt-repository    
+RUN export DEBIAN_FRONTEND=noninteractive && \
+	apt-get -y install software-properties-common
+
+# add libpng12 which is non standard for ubuntu 22.04
+RUN add-apt-repository ppa:linuxuprising/libpng12 && \
+    apt-get update && \
+    apt-get -y install libpng12-0
+  
+RUN dpkg --add-architecture i386
+RUN apt-get install build-essential
+RUN apt-get update && apt-get install -y \
+      gcc-multilib g++-multilib \
+      lib32z1 lib32stdc++6 lib32gcc-s1 \
+      expat:i386 fontconfig:i386 libfreetype6:i386 libexpat1:i386 libc6:i386 libgtk-3-0:i386 \
+      libcanberra0:i386 libice6:i386 libsm6:i386 libncurses5:i386 zlib1g:i386 \
+      libx11-6:i386 libxau6:i386 libxdmcp6:i386 libxext6:i386 libxft2:i386 libxrender1:i386 \
+      libxt6:i386 libxtst6:i386 libbz2-1.0:i386
+
+ADD ${modelsim_installer}  /tmp/
+RUN cd /tmp &&\
+	chmod a+x ${installer_path}/${modelsim_installer} &&\
+	echo "Installing ModelSim..." &&\
+	${installer_path}/${modelsim_installer} --help &&\
+	${installer_path}/${modelsim_installer} --mode unattended --accept_eula 1 --installdir ${install_path} --unattendedmodeui none && \
+	${install_path}/modelsim_ase/bin/vsim -c -version && echo "ModelSim has installed successfully" &&\
+	rm -rf /tmp/*
+	
+
+ENV PATH=${install_path}"/modelsim_ase/bin:${PATH}"
+
+#### ADD DEFAULT USER ####
+ARG USER=glacier
+ENV USER ${USER}
+RUN adduser --disabled-password --gecos '' ${USER} \
+	&& adduser ${USER} sudo \
+	&& echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+ENV USER_HOME /home/${USER}
+RUN chown -R ${USER}:${USER} ${USER_HOME}
+RUN chown -R root:${USER} /opt
+RUN chmod -R g+rwx /opt 
+
+
+	

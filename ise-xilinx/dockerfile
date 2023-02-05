@@ -1,0 +1,51 @@
+# https://gitlab.com/cweickhmann/ise-in-docker/-/tree/main/
+
+FROM ubuntu:14.04
+
+RUN apt-get update
+RUN apt-get install -y --install-recommends firefox
+RUN apt-get install -y --install-recommends \
+		       libncurses5 libqt4-core libx11-6 \
+                       libsm6 libxi6 libgconf-2-4 libxrender1 \
+                       libxrandr2 libfreetype6 libfontconfig1 \
+                       libxm4 libxp6 libstdc++5 rpcbind \
+                       build-essential sudo mc vim 
+RUN rpcbind
+
+COPY headless-install.sh /
+ADD Xilinx_ISE_DS_Lin_14.7_1015_1.tar /xilinx
+ENV TERM xterm-256color
+RUN yes | /xilinx/Xilinx_ISE_DS_Lin_14.7_1015_1/bin/lin64/batchxsetup --batch /headless-install.sh
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN mv /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6 /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6.distrib
+RUN mv /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6.0.8 /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6.0.8.distrib
+RUN ln /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6
+RUN ln /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19 /opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libstdc++.so.6.0.19
+# ENV LD_LIBRARY_PATH /lib:/lib64:/usr/lib:/usr/lib64
+RUN rm -rf /xilinx
+
+#ENV THE_USER=glacier
+#ENV UID_GID=1000
+
+#RUN groupadd -g ${UID_GID} ${THE_USER}
+#RUN useradd -d /home/${THE_USER} -s /bin/bash -m ${THE_USER} -u ${UID_GID} -g ${UID_GID}
+
+#USER ${THE_USER}
+#ENV HOME /home/${THE_USER}
+#SHELL ["/bin/bash", "-c"]
+#CMD source /opt/Xilinx/14.7/ISE_DS/settings64.sh && ise
+
+
+#### ADD DEFAULT USER ####
+ARG USER=glacier
+ENV USER ${USER}
+RUN adduser --disabled-password --gecos '' ${USER} \
+	&& adduser ${USER} sudo \
+	&& echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+ENV USER_HOME /home/${USER}
+RUN chown -R ${USER}:${USER} ${USER_HOME}
+RUN chown -R root:${USER} /opt
+RUN chmod -R g+rwx /opt 
+
+
