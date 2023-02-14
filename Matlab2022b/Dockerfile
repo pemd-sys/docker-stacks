@@ -79,6 +79,7 @@ RUN apt-get update -y && apt-get install -y iproute2 traceroute ufw iputils-ping
 	
 RUN apt-get update -y && apt-get install -y vim \
 	mc \
+	rsync \
 	pkg-config \
 	python3-dev \
 	python3-pip \

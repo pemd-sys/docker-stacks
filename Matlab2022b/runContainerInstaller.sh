@@ -23,7 +23,7 @@ else
     MATLABHOMEDIR=/home/glacier
     MATLABHOSTHOMEDIR=/home/matrix/Work/08_Matlab_workspace
 
-
+    tar -zcvf $MATLABHOSTHOMEDIR/Sims-archive.tar.gz $MATLABHOSTHOMEDIR/Sims
     docker run \
         -it --user glacier --rm --hostname=MatlabDocker \
 		--network no-internet \
@@ -37,11 +37,10 @@ else
         --volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
         -v $XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
 		-v $MATLABHOSTHOMEDIR:$MATLABHOMEDIR \
-		--name $CONTAINER_NAME matlab-amd:base
+		--name $CONTAINER_NAME matlab-amd:base 
+#		-v /media/matrix/MATHWORKS_R2022B:/tmp/Matlab_R2022b_installer \
+#		-v /media/matrix/Matlab913_Update2Lin:/tmp/Matlab_R2022b_installer_update \
 
-
-#		-v ${PWD}/Matlab_R2022b_installer:/tmp/Matlab_R2022b_installer \
-#		-v /media/matrix/Matlab913_Update2Lin:/tmp/Matlab_R2022b_installer \
 
 fi
 
@@ -78,5 +77,21 @@ fi
 # run in matlab command window
 # >> opengl info
 # it should show the AMD renoir opengl driver.
+
+## create symbolic link (ln -s)
+# create a matalb shortcuts directory
+# /opt/MATLAB/R2022b/bin/matlab
+# /opt/MATLAB/R2022b/bin/deploytool
+# /opt/MATLAB/R2022b/bin/mbuild
+# /opt/MATLAB/R2022b/bin/mcc
+# /opt/MATLAB/R2022b/bin/mex
+
+
+# R2022b below update 4 - linux
+# Simulink has problem saving to the shared host directory 
+# https://uk.mathworks.com/matlabcentral/answers/1798895-invalid-cross-device-link-18-when-saving-a-file-on-arch-linux?s_tid=prof_contriblnk
+# so as a workaround copy the runMatlab.sh into the matlab host share directory ($MATLABHOSTHOMEDIR)
+# and run the script instead (uses rsync to copy from and copy back to the host directory before and after launching and closing matlab)
+# Do all work and saving in the tmp/Sims directory. Simulink has no problem saving in the tmp folder.
 
 
