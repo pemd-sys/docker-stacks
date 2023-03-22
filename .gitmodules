@@ -1,3 +1,12 @@
 [submodule "fenics/dolfinx"]
 	path = fenics/dolfinx
 	url = git@github.com:FEniCS/dolfinx.git
+[submodule "fenics/ufl"]
+	path = fenics/ufl
+	url = git@github.com:FEniCS/ufl.git
+[submodule "fenics/ffcx"]
+	path = fenics/ffcx
+	url = git@github.com:FEniCS/ffcx.git
+[submodule "fenics/basix"]
+	path = fenics/basix
+	url = git@github.com:FEniCS/basix.git
