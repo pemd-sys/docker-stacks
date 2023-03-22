@@ -1,0 +1,3 @@
+[submodule "fenics/dolfinx"]
+	path = fenics/dolfinx
+	url = git@github.com:FEniCS/dolfinx.git
