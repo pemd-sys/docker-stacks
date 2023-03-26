@@ -1,6 +1,3 @@
-[submodule "fenics/dolfinx"]
-	path = fenics/dolfinx
-	url = git@github.com:FEniCS/dolfinx.git
 [submodule "fenics/ufl"]
 	path = fenics/ufl
 	url = git@github.com:FEniCS/ufl.git
