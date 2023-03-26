@@ -1,3 +1,0 @@
-[submodule "fenics/ufl"]
-	path = fenics/ufl
-	url = git@github.com:FEniCS/ufl.git
