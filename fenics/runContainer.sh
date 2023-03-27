@@ -11,7 +11,7 @@ FENICSHOSTHOMEDIR=/home/matrix/Work/12_fenics_workspace
 
 docker run \
 	-it --rm --user glacier --hostname=FenicsDocker \
-	--network no-internet \
+	-p 8888:8888 \
 	--ulimit memlock=-1:-1 --ulimit stack=1073741824:1073741824 \
 	--ipc="host" --cap-drop=ALL --security-opt=no-new-privileges \
 	--shm-size=2g \

@@ -16,6 +16,10 @@
 # Set the base image to the latest LTS version of Ubuntu
 #FROM ubuntu:latest
 
+# TO-DO
+# use the instructions from following to update the script below
+# https://www.elmerfem.org/forum/viewtopic.php?p=27568
+
 FROM nvidia/cuda:12.0.0-runtime-ubuntu22.04
 
 

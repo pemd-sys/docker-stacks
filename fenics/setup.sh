@@ -11,3 +11,5 @@ git clone --branch v0.6.0 --depth 1  git@github.com:FEniCS/ffcx.git
 # rm -rf basix
 # rm -rf ffcx
 
+# git clone --branch  v0.6.0.post0 --depth 1  git@github.com:jorgensd/dolfinx-tutorial.git
+
