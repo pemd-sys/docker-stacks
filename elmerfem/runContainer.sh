@@ -32,7 +32,7 @@ CONTAINER_NAME=ElmerContainer
 
 
 ELMERHOMEDIR=/home/glacier
-ELMERHOSTHOMEDIR=/home/matrix/Work/06_Elmer_workspace
+ELMERHOSTHOMEDIR=/home/matrix/Work/15_elmer_workspace
 
 docker run \
 	--runtime=nvidia -it --rm --user glacier --hostname=ElmerDocker \
@@ -46,7 +46,10 @@ docker run \
 	--volume="/tmp/.X11-unix/:/tmp/.X11-unix/:rw" -v $XAUTHORITY:$XAUTHORITY \
 	-v $XDG_RUNTIME_DIR:$XDG_RUNTIME_DIR \
 	-v $ELMERHOSTHOMEDIR:$ELMERHOMEDIR \
-	--name $CONTAINER_NAME elmer-nvidia:latest
+	--name $CONTAINER_NAME elmer-nvidia:exptt
 
 # https://towardsdatascience.com/how-to-run-jupyter-notebook-on-docker-7c9748ed209f#b42d
 #https://stackoverflow.com/questions/38830610/access-jupyter-notebook-running-on-docker-container
+
+# 
+#
