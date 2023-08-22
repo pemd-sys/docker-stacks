@@ -26,19 +26,8 @@ RUN printf "Acquire::http::Pipeline-Depth 0;\nAcquire::http::No-Cache true;\nAcq
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
-RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y update && \
-    apt-get -y install software-properties-common && \
-    add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get -y update && \    
-    apt-get -y install python3.11 python-is-python3 && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 2 && \
-    update-alternatives --set python3 /usr/bin/python3.11 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-    
-# Add the necessary packages to compile Elmer/Ice
+ 
+# Add the necessary packages to compile 
 RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && apt-get upgrade -y && apt-get install -y \
 	build-essential \
 	cmake \
@@ -59,6 +48,7 @@ RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && apt-get upgrade -
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y update && \
     apt-get -y install \
+    python3 \
      python3-launchpadlib \
      initramfs-tools \
 	python3-dev \
